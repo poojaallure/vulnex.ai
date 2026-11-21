@@ -1,0 +1,64 @@
+# VULNEX AI - Unified Multi-Service Deployment
+# Orchestrates Backend, Frontend, and Demo (scan target) services in one repository.
+#
+# Usage:
+#   docker-compose up --build        # Start all services
+#   docker-compose up --build backend frontend  # Start only backend + frontend
+#
+# Services:
+#   backend     - FastAPI security scanning engine (port 8000)
+#   frontend    - Next.js SOC dashboard (port 3000)
+#   demo-project - Vulnerable FastAPI target app for scanning demos (port 8001)
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vulnex-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - SUPABASE_URL=${SUPABASE_URL:-}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY:-}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-}
+      - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      - MAX_UPLOAD_SIZE_MB=50
+    volumes:
+      - ./backend:/app/backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: vulnex-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  demo-project:
+    build:
+      context: ./demo-project
+      dockerfile: Dockerfile
+    container_name: vulnex-demo-project
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - STRIPE_LIVE_KEY=${STRIPE_LIVE_KEY:-REDACTED_PLACEHOLDER}
+      - DATABASE_URL=${DATABASE_URL:-postgres://admin_user:@db.prod.internal:5432/ecommerce_db}
+    restart: unless-stopped

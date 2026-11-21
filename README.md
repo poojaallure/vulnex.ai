@@ -51,6 +51,29 @@ AI-Generated Application (.ZIP)
    VULNEX Certified Security Passport
 ```
 
+## 3. Unified Project Structure
+
+VULNEX AI is a single-repository monorepo containing three integrated projects:
+
+```
+vulnex-ai/
+├── frontend/              # Next.js 14 SOC dashboard (port 3000)
+├── backend/               # FastAPI security scanning engine (port 8000)
+├── demo-project/          # Vulnerable FastAPI scan target (port 8001)
+├── docs/                  # Deployment and operations documentation
+├── .env.example           # Unified environment configuration
+├── .gitignore             # Git ignore rules
+├── docker-compose.yml     # Multi-service orchestration
+├── Makefile               # Local development commands
+└── README.md              # Project overview (this file)
+```
+
+**Integration:**
+- **Frontend → Backend:** Next.js calls FastAPI REST APIs via `NEXT_PUBLIC_API_URL`
+- **Backend → Demo Project:** Demo project is a scan target (uploaded as `.zip` or run standalone on port 8001)
+- **Backend → Supabase/Gemini:** Optional cloud/AI services via environment variables
+- All configuration is centralized in root `.env.example`
+
 ---
 
 ## 3. Technology Stack
@@ -111,40 +134,74 @@ VULNEX AI includes a curated benchmark dataset of **25 ground-truth applications
 - Python 3.11+
 - Node.js 18+ and npm
 
-### 1. Backend Setup
+### Quick Start (Makefile)
+
 ```bash
-# Navigate to backend and install requirements
+# 1. Copy environment template
+cp .env.example .env
+# Edit .env with your values (see docs/DEPLOYMENT.md)
+
+# 2. Install all dependencies
+make install
+
+# 3. Start all services (backend + frontend + demo project)
+make run
+
+# 4. Open http://localhost:3000 in your browser
+```
+
+### Manual Setup
+
+**Backend** (http://localhost:8000):
+```bash
 pip install -r backend/requirements.txt
-
-# Run backend unit tests
-python -m pytest backend/tests
-
-# Start FastAPI development server (runs on http://localhost:8000)
 python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### 2. Frontend Setup
+**Frontend** (http://localhost:3000):
 ```bash
-# Navigate to frontend and install dependencies
-cd frontend
-npm install
-
-# Build for production
-npm run build
-
-# Start Next.js development server (runs on http://localhost:3000)
+cd frontend && npm ci
 npm run dev
 ```
 
-Visit **`http://localhost:3000`** in your browser.
+**Demo Project** (http://localhost:8001, optional scan target):
+```bash
+cd demo-project && python -m uvicorn app:app --host 0.0.0.0 --port 8001
+```
+
+**Run backend tests:**
+```bash
+make test
+```
+
 
 ---
 
-## 7. Production Deployment Guide
+## 7. Production Deployment
 
-VULNEX AI is engineered for multi-cloud production deployment with decoupled frontend, backend, database, and AI reasoning layers:
-- **Frontend:** Vercel (Next.js Edge/Serverless)
-- **Backend:** Render (Python Web Service or Docker Container)
+For detailed deployment instructions, see [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
+
+### Quick Deploy with Docker Compose
+
+```bash
+# 1. Copy environment template
+cp .env.example .env
+# Edit .env with your production values
+
+# 2. Build and start all services
+docker-compose up --build
+
+# 3. Frontend: http://localhost:3000
+# 4. Backend API: http://localhost:8000
+# 5. Demo project: http://localhost:8001
+```
+
+### Multi-Cloud Deployment
+
+VULNEX AI is engineered for decoupled multi-cloud deployment:
+
+- **Frontend:** Vercel (Next.js Edge/Serverless) — Root Directory: `frontend`
+- **Backend:** Render (Python Web Service or Docker Container) — Dockerfile: `./backend/Dockerfile`
 - **Database:** Supabase (PostgreSQL with PostgREST sync)
 - **AI Engine:** Google Gemini API
 

@@ -53,6 +53,7 @@ vulnex.db
 backend/.env
 frontend/.env
 frontend/.env.local
+demo-project/.env
 
 # Operating System
 .DS_Store
