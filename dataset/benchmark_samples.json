@@ -1,0 +1,232 @@
+{
+  "benchmark_name": "VULNEX AI Security Benchmark v1.0",
+  "total_samples": 25,
+  "description": "Ground-truth benchmark suite evaluated across Traditional Static Scanners, AI-Only prompts, and VULNEX Hybrid.",
+  "samples": [
+    {
+      "id": "bm_01",
+      "name": "ecom_sqli_raw",
+      "category": "SQL Injection",
+      "cwe": "CWE-89",
+      "has_vulnerability": true,
+      "severity": "CRITICAL",
+      "description": "f-string parameter interpolation into raw SQLite execute()"
+    },
+    {
+      "id": "bm_02",
+      "name": "ecom_sqli_safe_orm",
+      "category": "SQL Injection",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "SQLAlchemy ORM parameterized query using bindparams"
+    },
+    {
+      "id": "bm_03",
+      "name": "payment_cmd_inject",
+      "category": "Command Injection",
+      "cwe": "CWE-78",
+      "has_vulnerability": true,
+      "severity": "CRITICAL",
+      "description": "subprocess.Popen with shell=True accepting user-provided string"
+    },
+    {
+      "id": "bm_04",
+      "name": "payment_cmd_tokenized",
+      "category": "Command Injection",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "subprocess.run with argument list array and shell=False"
+    },
+    {
+      "id": "bm_05",
+      "name": "auth_admin_bypass",
+      "category": "Broken Auth",
+      "cwe": "CWE-306",
+      "has_vulnerability": true,
+      "severity": "HIGH",
+      "description": "Administrative export endpoint without authentication decorator"
+    },
+    {
+      "id": "bm_06",
+      "name": "auth_jwt_guarded",
+      "category": "Broken Auth",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "FastAPI route guarded with Depends(get_current_admin_user)"
+    },
+    {
+      "id": "bm_07",
+      "name": "cloud_s3_hardcoded_key",
+      "category": "Hardcoded Secrets",
+      "cwe": "CWE-798",
+      "has_vulnerability": true,
+      "severity": "CRITICAL",
+      "description": "AWS AKIA key embedded directly into configuration file"
+    },
+    {
+      "id": "bm_08",
+      "name": "cloud_s3_env_vault",
+      "category": "Hardcoded Secrets",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "Credentials loaded dynamically via os.environ"
+    },
+    {
+      "id": "bm_09",
+      "name": "session_pickle_untrusted",
+      "category": "Unsafe Deserialization",
+      "cwe": "CWE-502",
+      "has_vulnerability": true,
+      "severity": "CRITICAL",
+      "description": "pickle.loads invoked on user-supplied cookie bytes"
+    },
+    {
+      "id": "bm_10",
+      "name": "session_json_safe",
+      "category": "Unsafe Deserialization",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "JSON serializer with strict schema validation"
+    },
+    {
+      "id": "bm_11",
+      "name": "file_path_traversal",
+      "category": "Path Traversal",
+      "cwe": "CWE-22",
+      "has_vulnerability": true,
+      "severity": "HIGH",
+      "description": "open(os.path.join(base_dir, request.args.get('file')))"
+    },
+    {
+      "id": "bm_12",
+      "name": "file_path_basename_safe",
+      "category": "Path Traversal",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "Path validated with os.path.basename and allowlisted extensions"
+    },
+    {
+      "id": "bm_13",
+      "name": "supply_chain_pyyaml_old",
+      "category": "Vulnerable Dependencies",
+      "cwe": "CWE-1395",
+      "has_vulnerability": true,
+      "severity": "CRITICAL",
+      "description": "PyYAML==5.3.1 subject to CVE-2020-14343 RCE"
+    },
+    {
+      "id": "bm_14",
+      "name": "supply_chain_pyyaml_patched",
+      "category": "Vulnerable Dependencies",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "PyYAML>=6.0.1 with default SafeLoader"
+    },
+    {
+      "id": "bm_15",
+      "name": "webhook_ssrf_unfiltered",
+      "category": "SSRF",
+      "cwe": "CWE-918",
+      "has_vulnerability": true,
+      "severity": "HIGH",
+      "description": "requests.get(target_url) without private IP range filtering"
+    },
+    {
+      "id": "bm_16",
+      "name": "webhook_ssrf_allowlisted",
+      "category": "SSRF",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "Strict domain allowlist with DNS re-binding checks"
+    },
+    {
+      "id": "bm_17",
+      "name": "cors_wildcard_credentials",
+      "category": "Insecure Config",
+      "cwe": "CWE-942",
+      "has_vulnerability": true,
+      "severity": "MEDIUM",
+      "description": "Access-Control-Allow-Origin: * paired with allow_credentials=True"
+    },
+    {
+      "id": "bm_18",
+      "name": "cors_strict_origin",
+      "category": "Insecure Config",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "Explicit origins array restricted to production domains"
+    },
+    {
+      "id": "bm_19",
+      "name": "react_innerhtml_xss",
+      "category": "XSS",
+      "cwe": "CWE-79",
+      "has_vulnerability": true,
+      "severity": "HIGH",
+      "description": "dangerouslySetInnerHTML receiving unsanitized user markdown"
+    },
+    {
+      "id": "bm_20",
+      "name": "react_sanitized_dompurify",
+      "category": "XSS",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "DOMPurify.sanitize wrapped around HTML markup"
+    },
+    {
+      "id": "bm_21",
+      "name": "crypto_md5_pwd_hash",
+      "category": "Broken Cryptography",
+      "cwe": "CWE-328",
+      "has_vulnerability": true,
+      "severity": "MEDIUM",
+      "description": "hashlib.md5 used for password storage"
+    },
+    {
+      "id": "bm_22",
+      "name": "crypto_argon2_pwd_hash",
+      "category": "Broken Cryptography",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "Argon2id hashing with salt and adaptive memory cost"
+    },
+    {
+      "id": "bm_23",
+      "name": "stripe_sk_live_exposed",
+      "category": "Hardcoded Secrets",
+      "cwe": "CWE-798",
+      "has_vulnerability": true,
+      "severity": "CRITICAL",
+      "description": "sk_live_ Stripe token committed to repository"
+    },
+    {
+      "id": "bm_24",
+      "name": "subprocess_shlex_quote",
+      "category": "Command Injection",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "shlex.quote escaping on shell arguments"
+    },
+    {
+      "id": "bm_25",
+      "name": "sql_prepared_statement",
+      "category": "SQL Injection",
+      "cwe": null,
+      "has_vulnerability": false,
+      "severity": "NONE",
+      "description": "Native driver prepared statement with ? placeholders"
+    }
+  ]
+}
