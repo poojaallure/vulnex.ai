@@ -21,8 +21,8 @@ install: install-backend install-frontend ## Install all dependencies (backend +
 install-backend: ## Install Python backend dependencies
 	pip install -r backend/requirements.txt
 
-install-frontend: ## Install Node.js frontend dependencies
-	cd frontend && npm ci
+install-frontend: ## Install Node.js frontend dependencies (run from frontend/)
+	cd frontend; npm ci
 
 # ---------------------------------------------------------------
 # Local development servers
@@ -30,11 +30,11 @@ install-frontend: ## Install Node.js frontend dependencies
 run-backend: ## Start FastAPI backend on http://localhost:8000
 	python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
 
-run-frontend: ## Start Next.js frontend on http://localhost:3000
-	cd frontend && npm run dev
+run-frontend: ## Start Next.js frontend on http://localhost:3000 (must run from frontend/)
+	cd frontend; npm run dev
 
 run-demo: ## Start vulnerable demo project on http://localhost:8001
-	cd demo-project && python -m uvicorn app:app --host 0.0.0.0 --port 8001
+	cd demo-project; python -m uvicorn app:app --host 0.0.0.0 --port 8001
 
 run: ## Start all services (backend + frontend) in parallel
 	@echo "Starting backend on http://localhost:8000"
@@ -49,14 +49,14 @@ run: ## Start all services (backend + frontend) in parallel
 test: ## Run backend unit tests
 	python -m pytest backend/tests -v
 
-test-frontend: ## Run frontend typecheck / lint
-	cd frontend && npm run lint
+test-frontend: ## Run frontend typecheck / lint (must run from frontend/)
+	cd frontend; npm run lint
 
 # ---------------------------------------------------------------
 # Build
 # ---------------------------------------------------------------
-build-frontend: ## Build Next.js frontend for production
-	cd frontend && npm run build
+build-frontend: ## Build Next.js frontend for production (must run from frontend/)
+	cd frontend; npm run build
 
 build: build-frontend ## Build all production artifacts
 
